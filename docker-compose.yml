@@ -3,12 +3,16 @@ services:
   app:
     build: .
     container_name: langchain_app
-    ports:
-      - "8000:8000"
+    restart: always
     depends_on:
       - pgvector
-    env_file:
-      - .env
+    ports:
+      - "8081:8000"
+    environment:
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY}
+      DATABASE_URL: postgresql://postgres:postgres@pgvector:5432/ragdb
+      HOST: 0.0.0.0
+      PORT: 8000
     volumes:
       - .:/app
 
@@ -22,3 +26,8 @@ services:
       POSTGRES_PASSWORD: postgres
     ports:
       - "5544:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

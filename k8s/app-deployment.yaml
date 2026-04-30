@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: langchain-app
+  namespace: rag-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: langchain-app
+  template:
+    metadata:
+      labels:
+        app: langchain-app
+    spec:
+      containers:
+        - name: app
+          image: langchain-agentic-rag:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          env:
+          - name: GOOGLE_API_KEY
+            value: "your_key"
+          - name: DATABASE_URL
+            value: "postgresql://postgres:postgres@pgvector:5432/ragdb"
